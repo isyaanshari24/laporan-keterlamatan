@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Keterlambatan — PT. SHM</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --card: #1e2333;
+    --border: #2a3048;
+    --accent: #f5a623;
+    --accent2: #3b82f6;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1a2333, #0f1117);
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .header-title h1 { font-size: 1.5rem; letter-spacing: 0.5px; }
+  .header-title p { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+  
+  .tabs { display: flex; gap: 8px; }
+  .tabs button {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); padding: 8px 16px; border-radius: 6px;
+    cursor: pointer; font-weight: 500; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .tabs button.active {
+    background: var(--accent2); color: #fff; border-color: var(--accent2);
+  }
+
+  main { max-width: 900px; margin: 25px auto; padding: 0 15px; padding-bottom: 60px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+  .card-box h3 { font-size: 1.1rem; margin-bottom: 15px; color: var(--accent); display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; color: #9ca3af; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  
+  input[type="text"], input[type="date"], input[type="time"], textarea, select {
+    width: 100%; background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 10px 12px; border-radius: 6px;
+    font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s;
+  }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent2); }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .chips-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .chip {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 6px 12px; border-radius: 20px; font-size: 0.85rem;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px; user-select: none; transition: all 0.2s;
+  }
+  .chip.selected { background: rgba(59, 130, 246, 0.2); border-color: var(--accent2); color: #93c5fd; font-weight: 600; }
+  .chip-del { background: transparent; border: 0; color: var(--danger); font-size: 1.1rem; cursor: pointer; font-weight: bold; line-height: 1; padding: 0 2px; }
+
+  .add-project-box { display: flex; gap: 8px; max-width: 350px; }
+  .add-project-box input { padding: 6px 10px; font-size: 0.85rem; }
+
+  .rekom-item { display: flex; gap: 10px; margin-bottom: 10px; align-items: stretch; }
+  .rekom-item textarea { min-height: 45px; font-size: 0.9rem; padding: 8px; }
+  
+  .btn {
+    padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; border: 0; display: inline-flex; align-items: center; gap: 8px; justify-content: center; transition: opacity 0.2s;
+  }
+  .btn:active { opacity: 0.8; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary { background: var(--accent2); color: #fff; }
+  .btn-accent { background: var(--accent); color: #111; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-secondary { background: #374151; color: var(--text); border: 1px solid var(--border); }
+  .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 4px; }
+  
+  .ai-control-box { display: flex; align-items: center; gap: 15px; margin-top: 10px; flex-wrap: wrap; }
+  #ai-rekom-status { font-size: 0.85rem; font-family: var(--mono); color: var(--muted); }
+
+  .action-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 25px; border-top: 1px solid var(--border); padding-top: 15px; }
+  .action-left, .action-right { display: flex; gap: 10px; }
+
+  #preview-output {
+    background: #0b141a; color: #e9edef; font-family: Helvetica, Arial, sans-serif;
+    padding: 15px; border-radius: 8px; font-size: 0.92rem; line-height: 1.45;
+    white-space: pre-wrap; border: 1px solid #222e35; max-width: 550px; margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  #preview-output .bold { font-weight: bold; color: #fff; }
+
+  .history-filter-box { background: var(--surface); border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: end; }
+  .history-filter-box .form-group { margin-bottom: 0; }
+  .history-summary { font-size: 0.85rem; font-family: var(--mono); color: var(--accent); margin-bottom: 15px; padding: 0 4px; }
+
+  #history-list { display: flex; flex-direction: column; gap: 12px; }
+  .history-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 15px; position: relative; }
+  .hc-top { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; font-family: var(--mono); color: #9ca3af; }
+  .hc-projects { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .hc-chip { background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.3); color: #fcd34d; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+  .hc-cause { font-size: 0.95rem; font-weight: 500; margin-bottom: 12px; line-height: 1.4; color: var(--text); border-left: 3px solid var(--accent2); padding-left: 10px; }
+  .hc-actions { display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
+  .hc-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 5px 10px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+  .hc-btn:hover { background: #2a3048; }
+  .hc-btn.danger:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
+
+  #toast { position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%); background: #22c55e; color: #fff; padding: 10px 24px; border-radius: 30px; font-weight: 600; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 9999; transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  #toast.show { bottom: 30px; }
+
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 600px) {
+    header { flex-direction: column; align-items: stretch; text-align: center; }
+    .tabs { justify-content: center; }
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+    .action-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .action-left, .action-right { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">
+    <h1>PT. SUMBER HAYATI MANDIRI</h1>
+    <p>Sistem Pengawas Lapangan — Laporan Keterlambatan Kerja</p>
+  </div>
+  <div class="tabs">
+    <button class="active" onclick="switchTab('form')">📝 Input Form</button>
+    <button onclick="goPreview()">👁 Preview WA</button>
+    <button onclick="switchTab('history')">🗄 Histori & Rekap</button>
+  </div>
+</header>
+
+<main>
+  <div id="tab-form" class="tab-content active">
+    <div class="card-box">
+      <h3>🚢 1. Pilih Proyek yang Terdampak</h3>
+      <div id="project-chips" class="chips-container"></div>
+      <div class="add-project-box">
+        <input type="text" id="inp-new-project" placeholder="Tambah nama kapal/proyek baru…">
+        <button class="btn btn-secondary btn-sm" onclick="addProject()">+ Tambah</button>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <h3>⏱ 2. Waktu Kejadian</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tanggal Kejadian</label>
+          <input type="date" id="inp-tanggal">
+        </div>
+        <div class="form-row" style="gap:10px;">
+          <div class="form-group">
+            <label>Jam Mulai</label>
+            <input type="time" id="inp-jam-mulai" value="08:00">
+          </div>
+          <div class="form-group">
+            <label>Jam Selesai</label>
+            <input type="time" id="inp-jam-selesai">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <h3>⚠️ 3. Akar Masalah / Penyebab Keterlambatan</h3>
+      <div class="form-group">
+        <label>Deskripsi Kendala di Lapangan</label>
+        <textarea id="inp-penyebab" placeholder="Contoh: Hujan lebat disertai angin kencang di area dock, memicu risiko fatalitas sengatan listrik pada pengerjaan Fit-Up dan Welding plat lambung kapal..."></textarea>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <h3>🛡 4. Rekomendasi Solusi & Tindakan K3</h3>
+      <div id="rekom-list"></div>
+      
+      <div class="ai-control-box">
+        <button id="btn-ai-rekom" class="btn btn-accent" onclick="generateAIRekom()">
+          ✨ Ambil Rekomendasi AI (Gemini)
+        </button>
+        <button class="btn btn-secondary btn-add-rekom" onclick="addRekom()">
+          + Tambah Manual
+        </button>
+        <div id="ai-rekom-status">Siap menganalisa.</div>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <h3>🔄 5. Tindak Lanjut Pengawasan</h3>
+      <div class="form-group">
+        <label>Langkah Pengawas Selanjutnya</label>
+        <textarea id="inp-tindak" placeholder="Contoh: Terus memantau kondisi cuaca, mengamankan jalur kabel mesin las, dan memastikan izin Hot Work Permit diperbarui setelah kondisi aman."></textarea>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <div class="action-left">
+        <button class="btn btn-danger" onclick="resetForm()">🗑 Reset Form</button>
+      </div>
+      <div class="action-right">
+        <button class="btn btn-secondary" onclick="syncFromGAS()">🔄 Sinkronisasi Cloud</button>
+        <button class="btn btn-primary" onclick="saveReport()">💾 Simpan Laporan</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-preview" class="tab-content">
+    <div style="margin-bottom: 20px; text-align: center;">
+      <h2 style="font-size:1.2rem; margin-bottom:5px;">Preview Format Pesan WhatsApp</h2>
+      <p style="color:var(--muted); font-size:0.85rem;">Siap untuk disalin langsung ke Grup Koordinasi Lapangan</p>
+    </div>
+    
+    <div id="preview-output"></div>
+    
+    <div class="action-bar" style="max-width: 550px; margin: 20px auto 0;">
+      <button class="btn btn-secondary" onclick="switchTab('form')">⬅ Kembali Edit</button>
+      <button class="btn btn-primary" onclick="copyWA()">📋 Salin Teks WhatsApp</button>
+    </div>
+  </div>
+
+  <div id="tab-history" class="tab-content">
+    <div class="history-filter-box">
+      <div class="form-group">
+        <label>Filter Proyek</label>
+        <select id="filter-project" onchange="renderHistory()"></select>
+      </div>
+      <div class="form-group">
+        <label>Dari Tanggal</label>
+        <input type="date" id="filter-from" onchange="renderHistory()">
+      </div>
+      <div class="form-group">
+        <label>Sampai Tanggal</label>
+        <input type="date" id="filter-to" onchange="renderHistory()">
+      </div>
+    </div>
+
+    <div class="history-summary" id="filter-count">Menampilkan 0 laporan</div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+      <button class="btn btn-secondary btn-sm" onclick="copyFiltered()">📋 Salin Semua yang Terfilter</button>
+      <button class="btn btn-accent btn-sm" onclick="exportFilteredPDF()">🖨 Cetak PDF / Rekap</button>
+    </div>
+
+    <div id="history-list"></div>
+  </div>
+</main>
+
+<div id="toast">✓ Berhasil!</div>
+
+<script type="importmap">
+  {
+    "imports": {
+      "@google/genai": "https://esm.run/@google/genai"
+    }
+  }
+</script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
