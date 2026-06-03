@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Keterlambatan — PT. SHM</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --card: #1e2333;
+    --border: #2a3048;
+    --accent: #f5a623;
+    --accent2: #3b82f6;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .logo-badge {
+    background: var(--accent);
+    color: #000;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: .5px;
+  }
+  header h1 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  header span {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tabs button {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 18px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+  }
+  .tabs button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── MAIN ── */
+  .tab-content { display: none; padding: 16px; max-width: 700px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  /* ── FORM ── */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  .form-row { margin-bottom: 14px; }
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 5px;
+    font-family: var(--mono);
+  }
+  input[type=text], input[type=date], input[type=time], textarea, select {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent2); }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* project chips */
+  .project-list {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    min-height: 48px;
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .15s;
+    user-select: none;
+  }
+  .chip.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+  .chip-del {
+    font-size: 14px; line-height: 1; opacity: .6;
+    background: none; border: none; cursor: pointer; padding: 0;
+    color: inherit;
+  }
+
+  .add-project-row {
+    display: flex; gap: 8px; margin-top: 8px;
+  }
+  .add-project-row input { flex: 1; }
+  .add-project-row button {
+    background: var(--accent2);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    width: 40px; border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* rekomendasi list */
+  .rekom-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-bottom: 8px;
+  }
+  .rekom-item textarea { flex: 1; min-height: 48px; }
+  .rekom-item button {
+    background: none; border: 1px solid var(--border);
+    color: var(--danger); border-radius: 6px;
+    width: 34px; height: 34px; cursor: pointer;
+    font-size: 16px; flex-shrink: 0; margin-top: 2px;
+  }
+  .btn-add-rekom {
+    background: none;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    border-radius: 6px;
+    width: 100%; padding: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: var(--sans);
+  }
+  .btn-add-rekom:hover { border-color: var(--accent2); color: var(--accent2); }
+  .btn-add-rekom:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    border-style: solid;
+    border-color: var(--border) !important;
+    color: var(--muted) !important;
+  }
+
+  /* spinner */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid var(--muted);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  /* action buttons */
+  .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn {
+    flex: 1; min-width: 120px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    border: none;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn:hover { opacity: .85; }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-secondary { background: var(--success); color: #000; }
+  .btn-outline {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  /* ── PREVIEW ── */
+  .preview-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #c9d1d9;
+    min-height: 200px;
+    margin-bottom: 14px;
+  }
+  .preview-box .bold { font-weight: 700; color: var(--text); }
+
+  .copy-bar {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  .btn-copy {
+    flex: 1;
+    padding: 10px;
+    background: var(--accent2);
+    border: none; border-radius: 8px;
+    color: #fff; font-weight: 600;
+    font-family: var(--sans); font-size: 13px;
+    cursor: pointer;
+  }
+  .btn-pdf {
+    flex: 1;
+    padding: 10px;
+    background: var(--danger);
+    border: none; border-radius: 8px;
+    color: #fff; font-weight: 600;
+    font-family: var(--sans); font-size: 13px;
+    cursor: pointer;
+  }
+
+  /* ── HISTORY ── */
+  .filter-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .filter-bar select, .filter-bar input { font-size: 13px; }
+
+  .history-empty {
+    text-align: center; color: var(--muted);
+    font-family: var(--mono); font-size: 12px;
+    padding: 40px 0;
+  }
+
+  .history-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color .2s;
+  }
+  .history-card:hover { border-color: var(--accent2); }
+  .hc-top {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 8px;
+  }
+  .hc-date {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); font-weight: 600;
+  }
+  .hc-time {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--muted);
+  }
+  .hc-projects {
+    display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0 6px;
+  }
+  .hc-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11px; padding: 2px 8px;
+    color: var(--muted);
+  }
+  .hc-cause {
+    font-size: 12px; color: var(--muted);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hc-actions {
+    display: flex; gap: 8px; margin-top: 10px;
+  }
+  .hc-btn {
+    flex: 1; padding: 7px;
+    border-radius: 6px; border: 1px solid var(--border);
+    background: none; color: var(--text);
+    font-size: 12px; font-family: var(--sans);
+    cursor: pointer; font-weight: 500;
+    transition: all .15s;
+  }
+  .hc-btn:hover { background: var(--surface); }
+  .hc-btn.danger { color: var(--danger); border-color: var(--danger); }
+
+  /* toast */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--success); color: #000;
+    padding: 10px 20px; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    font-family: var(--mono);
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s;
+    z-index: 999;
+  }
+  #toast.show { opacity: 1; }
+
+  /* ── PRINT / PDF ── */
+  @media print {
+    body { background: #fff; color: #000; }
+    header, .tabs, .btn-row, .copy-bar, #tab-form, #tab-history,
+    #tab-form.tab-content, #tab-history.tab-content { display: none !important; }
+    #tab-preview.tab-content { display: block !important; padding: 0; }
+    .preview-box {
+      background: none; border: none;
+      font-size: 14px; color: #000;
+      page-break-inside: avoid;
+    }
+    .preview-box .bold { color: #000; }
+    .print-header { display: block !important; }
+  }
+  .print-header { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">SHM</div>
+  <div>
+    <h1>Laporan Keterlambatan</h1>
+    <span>PT. Sumber Hayati Mandiri</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="active" onclick="switchTab('form')">📝 Buat Laporan</button>
+  <button onclick="switchTab('preview')">👁 Preview</button>
+  <button onclick="switchTab('history')">📋 Riwayat</button>
+</div>
+
+<!-- ═══════════════════════════════ TAB FORM ═══════════════════════════════ -->
+<div id="tab-form" class="tab-content active">
+
+  <div class="section-label">Tanggal & Waktu</div>
+  <div class="row2">
+    <div class="form-row">
+      <label>Tanggal</label>
+      <input type="date" id="inp-tanggal">
+    </div>
+    <div class="form-row">
+      <label>Jam Mulai</label>
+      <input type="time" id="inp-jam-mulai">
+    </div>
+  </div>
+  <div class="form-row">
+    <label>Jam Selesai (kosongkan jika belum)</label>
+    <input type="time" id="inp-jam-selesai">
+  </div>
+
+  <div class="section-label">Proyek Terdampak</div>
+  <label style="margin-bottom:8px">Ketuk untuk pilih / hapus pilihan</label>
+  <div class="project-list" id="project-chips"></div>
+  <div class="add-project-row">
+    <input type="text" id="inp-new-project" placeholder="Tambah proyek baru…" onkeydown="if(event.key==='Enter')addProject()">
+    <button onclick="addProject()">+</button>
+  </div>
+
+  <div class="section-label">Penyebab Keterlambatan</div>
+  <div class="form-row">
+    <textarea id="inp-penyebab" rows="3" placeholder="Jelaskan penyebab keterlambatan…"></textarea>
+  </div>
+
+  <div class="section-label">Rekomendasi</div>
+  <div id="rekom-list"></div>
+  <div style="display:flex;gap:8px;margin-top:4px">
+    <button class="btn-add-rekom" onclick="addRekom()" style="flex:1">+ Tambah Manual</button>
+    <button class="btn-add-rekom" id="btn-ai-rekom" onclick="generateAIRekom()" style="flex:1;border-color:var(--accent);color:var(--accent)">✨ Rekomendasi AI</button>
+  </div>
+  <div id="ai-rekom-status" style="font-size:11px;color:var(--muted);margin-top:6px;font-family:var(--mono)"></div>
+
+  <div class="section-label">Tindak Lanjut</div>
+  <div class="form-row">
+    <textarea id="inp-tindak" rows="2" placeholder="Tindak lanjut yang akan dilakukan…"></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="goPreview()">👁 Preview & Copy WA</button>
+    <button class="btn btn-secondary" onclick="saveReport()">💾 Simpan</button>
+    <button class="btn btn-outline" onclick="resetForm()">↺ Reset</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ TAB PREVIEW ═════════════════════════════ -->
+<div id="tab-preview" class="tab-content">
+  <div class="print-header">
+    <h2 style="font-size:16px;margin-bottom:4px">LAPORAN KETERLAMBATAN PELAKSANAAN PEKERJAAN</h2>
+    <p style="font-size:12px;color:#555">PT. Sumber Hayati Mandiri</p>
+    <hr style="margin:10px 0">
+  </div>
+
+  <div class="copy-bar">
+    <button class="btn-copy" onclick="copyWA()">📋 Copy Format WA</button>
+    <button class="btn-pdf" onclick="window.print()">🖨 Cetak / PDF</button>
+  </div>
+
+  <div class="preview-box" id="preview-output">— Isi form dulu, lalu klik Preview —</div>
+
+  <button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="switchTab('form')">← Kembali ke Form</button>
+</div>
+
+<!-- ══════════════════════════════ TAB HISTORY ════════════════════════════ -->
+<div id="tab-history" class="tab-content">
+  <div class="section-label" style="margin-top:0">Filter</div>
+  <div class="filter-bar">
+    <div>
+      <label>Proyek</label>
+      <select id="filter-project" onchange="renderHistory()">
+        <option value="">Semua Proyek</option>
+      </select>
+    </div>
+    <div>
+      <label>Dari Tanggal</label>
+      <input type="date" id="filter-from" onchange="renderHistory()">
+    </div>
+  </div>
+  <div class="filter-bar" style="grid-template-columns:1fr;margin-top:-6px">
+    <div>
+      <label>Sampai Tanggal</label>
+      <input type="date" id="filter-to" onchange="renderHistory()">
+    </div>
+  </div>
+
+  <div class="btn-row" style="margin-top:10px">
+    <button class="btn btn-primary" onclick="copyFiltered()">📋 Copy Teks (Rentang)</button>
+    <button class="btn btn-secondary" onclick="exportFilteredPDF()">📄 Export PDF</button>
+    <button class="btn btn-outline" onclick="syncFromGAS()">🔄 Sync</button>
+  </div>
+  <div id="filter-count" style="font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--mono)"></div>
+
+  <div id="history-list"></div>
+</div>
+
+<div id="toast">✓ Tersalin!</div>
+
+<script>
+// ────────────────────────── STATE ──────────────────────────
+const STORE_KEY = 'shm_keterlambatan';
+const PROJ_KEY  = 'shm_projects';
+
+let projects = JSON.parse(localStorage.getItem(PROJ_KEY) || '[]');
+if (!projects.length) {
+  projects = [
+    'BG. MBP 4005','LCT Bantu','Bahtera 02','BG. Belinjo',
+    'BG. Perkasa','KM. Antasena','Tongkang 01'
+  ];
+  saveProjects();
+}
+
+let selectedProjects = new Set();
+
+let rekoms = [];
+
+// ────────────────────────── INIT ──────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('inp-tanggal').value = today;
+
+  renderChips();
+  addRekom(); addRekom(); addRekom(); addRekom();
+  // default rekomendasi
+  const defaults = [
+    'Menghentikan sementara pekerjaan luar ruangan demi keselamatan personel dan kualitas hasil kerja',
+    'Melakukan inspeksi ulang pada area kerja setelah kondisi normal',
+    'Menyesuaikan jadwal pekerjaan dan menginformasikan perubahan kepada pihak terkait',
+    'Memastikan peralatan dan material terlindungi'
+  ];
+  rekoms.forEach((r,i) => {
+    if (defaults[i]) document.getElementById(r.id).value = defaults[i];
+  });
+
+  document.getElementById('inp-tindak').value =
+    'Pemantauan kondisi secara berkala dan evaluasi dampak terhadap target penyelesaian pekerjaan.';
+});
+
+// ────────────────────────── TABS ──────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tabs button').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.querySelectorAll('.tabs button')[['form','preview','history'].indexOf(name)].classList.add('active');
+  if (name === 'history') { populateFilterProject(); renderHistory(); }
+}
+
+// ────────────────────────── PROJECTS ──────────────────────────
+function saveProjects() {
+  localStorage.setItem(PROJ_KEY, JSON.stringify(projects));
+}
+
+function renderChips() {
+  const cont = document.getElementById('project-chips');
+  cont.innerHTML = '';
+  projects.forEach(p => {
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (selectedProjects.has(p) ? ' selected' : '');
+    chip.innerHTML = `<span onclick="toggleProject('${escQ(p)}')">${p}</span>
+      <button class="chip-del" onclick="removeProject('${escQ(p)}')" title="Hapus">×</button>`;
+    cont.appendChild(chip);
+  });
+}
+
+function toggleProject(p) {
+  if (selectedProjects.has(p)) selectedProjects.delete(p);
+  else selectedProjects.add(p);
+  renderChips();
+}
+
+function addProject() {
+  const inp = document.getElementById('inp-new-project');
+  const val = inp.value.trim();
+  if (!val) return;
+  if (!projects.includes(val)) { projects.push(val); saveProjects(); }
+  selectedProjects.add(val);
+  inp.value = '';
+  renderChips();
+}
+
+function removeProject(p) {
+  if (!confirm(`Hapus proyek "${p}" dari daftar?`)) return;
+  projects = projects.filter(x => x !== p);
+  selectedProjects.delete(p);
+  saveProjects();
+  renderChips();
+}
+
+// ────────────────────────── REKOMENDASI ──────────────────────────
+function addRekom() {
+  const id = 'rekom-' + Date.now() + Math.random().toString(36).slice(2);
+  rekoms.push({ id });
+  const row = document.createElement('div');
+  row.className = 'rekom-item';
+  row.id = 'row-' + id;
+  row.innerHTML = `
+    <textarea id="${id}" placeholder="Rekomendasi…"></textarea>
+    <button onclick="removeRekom('${id}')">−</button>
+  `;
+  document.getElementById('rekom-list').appendChild(row);
+}
+
+function removeRekom(id) {
+  rekoms = rekoms.filter(r => r.id !== id);
+  const el = document.getElementById('row-' + id);
+  if (el) el.remove();
+}
+
+// ────────────────────────── AI REKOMENDASI ──────────────────────────
+async function generateAIRekom() {
+  const penyebab = document.getElementById('inp-penyebab').value.trim();
+  const btnAI = document.getElementById('btn-ai-rekom');
+  const btnManual = document.querySelector('button[onclick="addRekom()"]');
+  const status = document.getElementById('ai-rekom-status');
+
+  if (!penyebab) {
+    alert('Isi "Penyebab Keterlambatan" dulu, baru AI bisa kasih rekomendasi.');
+    document.getElementById('inp-penyebab').focus();
+    return;
+  }
+
+  const existing = rekoms
+    .map(r => document.getElementById(r.id)?.value.trim())
+    .filter(Boolean);
+
+  // disable kedua tombol
+  btnAI.disabled = true;
+  if (btnManual) btnManual.disabled = true;
+
+  const originalText = btnAI.innerHTML;
+  btnAI.innerHTML = '<span class="spinner"></span> AI sedang berpikir...';
+  status.innerHTML = '<span class="spinner"></span> Menghubungi AI, mohon tunggu...';
+
+  try {
+    const res = await fetch('/api/public/ai-rekomendasi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        penyebab,
+        projects: [...selectedProjects],
+        existing,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Gagal mengambil rekomendasi');
+    if (!data.rekomendasi || !data.rekomendasi.length) throw new Error('AI tidak mengembalikan rekomendasi');
+
+    // hapus baris kosong terlebih dahulu agar tidak menumpuk
+    rekoms.slice().forEach(r => {
+      const el = document.getElementById(r.id);
+      if (el && !el.value.trim()) removeRekom(r.id);
+    });
+
+    data.rekomendasi.forEach(txt => {
+      addRekom();
+      const last = rekoms[rekoms.length - 1];
+      document.getElementById(last.id).value = txt;
+    });
+
+    status.innerHTML = '✓ ' + data.rekomendasi.length + ' rekomendasi ditambahkan dari AI';
+    showToast('✓ Rekomendasi AI ditambahkan!');
+  } catch (err) {
+    status.innerHTML = '✗ ' + err.message;
+    alert('Gagal: ' + err.message);
+  } finally {
+    btnAI.disabled = false;
+    btnAI.innerHTML = originalText;
+    if (btnManual) btnManual.disabled = false;
+  }
+}
+
+// ────────────────────────── BUILD LAPORAN ──────────────────────────
+function buildData() {
+  const tanggal   = document.getElementById('inp-tanggal').value;
+  const jamMulai  = document.getElementById('inp-jam-mulai').value;
+  const jamSelesai= document.getElementById('inp-jam-selesai').value;
+  const penyebab  = document.getElementById('inp-penyebab').value.trim();
+  const tindak    = document.getElementById('inp-tindak').value.trim();
+  const rekomList = rekoms.map(r => document.getElementById(r.id)?.value.trim()).filter(Boolean);
+
+  return { tanggal, jamMulai, jamSelesai, penyebab, rekomList, tindak,
+           projects: [...selectedProjects] };
+}
+
+function buildWAText(data) {
+  const { tanggal, jamMulai, jamSelesai, penyebab, rekomList, tindak, projects } = data;
+
+  const tgl = tanggal ? formatTanggal(tanggal) : '—';
+  const waktu = jamMulai
+    ? jamMulai + (jamSelesai ? ' - ' + jamSelesai : '') + ' WITA'
+    : '—';
+
+  let txt = `*LAPORAN KETERLAMBATAN PELAKSANAAN PEKERJAAN*\n\n`;
+  txt += `*1. Proyek yang Terdampak*\n`;
+  if (projects.length) {
+    projects.forEach(p => { txt += `- ${p}\n`; });
+  } else {
+    txt += `- (belum dipilih)\n`;
+  }
+  txt += `\n*2. Waktu Kejadian*: ${waktu}`;
+  txt += `\n*3. Penyebab*: ${penyebab || '—'}`;
+  txt += `\n*4. Rekomendasi*:\n`;
+  rekomList.forEach(r => { txt += `- ${r}\n`; });
+  if (!rekomList.length) txt += `- (belum diisi)\n`;
+  txt += `\n*5. Tindak Lanjut*: ${tindak || '—'}`;
+  txt += `\n\n_Tanggal Laporan: ${tgl}_`;
+  return txt;
+}
+
+function formatTanggal(str) {
+  const [y,m,d] = str.split('-');
+  const bulan = ['','Januari','Februari','Maret','April','Mei','Juni',
+                 'Juli','Agustus','September','Oktober','November','Desember'];
+  return `${parseInt(d)} ${bulan[parseInt(m)]} ${y}`;
+}
+
+// ────────────────────────── PREVIEW ──────────────────────────
+function goPreview() {
+  const data = buildData();
+  const wa   = buildWAText(data);
+  // render with bold highlights
+  const html = wa.replace(/\*([^*]+)\*/g, '<span class="bold">$1</span>');
+  document.getElementById('preview-output').innerHTML = html;
+  switchTab('preview');
+}
+
+function copyWA() {
+  const data = buildData();
+  const txt  = buildWAText(data);
+  navigator.clipboard.writeText(txt).then(() => showToast('✓ Tersalin ke clipboard!'));
+}
+
+// ────────────────────────── SAVE / HISTORY ──────────────────────────
+function saveReport() {
+  const data = buildData();
+  if (!data.tanggal) { alert('Isi tanggal dulu ya!'); return; }
+  if (!data.projects.length) { alert('Pilih minimal 1 proyek!'); return; }
+  if (!data.penyebab) { alert('Isi penyebab dulu!'); return; }
+
+  const records = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  data.id = Date.now();
+  data.savedAt = new Date().toISOString();
+  records.unshift(data);
+  localStorage.setItem(STORE_KEY, JSON.stringify(records));
+  showToast('✓ Laporan disimpan!');
+}
+
+function loadRecord(id) {
+  const records = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  const r = records.find(x => x.id === id);
+  if (!r) return;
+
+  document.getElementById('inp-tanggal').value   = r.tanggal || '';
+  document.getElementById('inp-jam-mulai').value = r.jamMulai || '';
+  document.getElementById('inp-jam-selesai').value= r.jamSelesai || '';
+  document.getElementById('inp-penyebab').value  = r.penyebab || '';
+  document.getElementById('inp-tindak').value    = r.tindak || '';
+
+  selectedProjects = new Set(r.projects || []);
+  renderChips();
+
+  // rebuild rekoms
+  document.getElementById('rekom-list').innerHTML = '';
+  rekoms = [];
+  (r.rekomList || []).forEach(txt => {
+    addRekom();
+    const last = rekoms[rekoms.length-1];
+    document.getElementById(last.id).value = txt;
+  });
+
+  switchTab('form');
+}
+
+function deleteRecord(id) {
+  if (!confirm('Hapus laporan ini?')) return;
+  let records = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  records = records.filter(x => x.id !== id);
+  localStorage.setItem(STORE_KEY, JSON.stringify(records));
+  renderHistory();
+  showToast('Laporan dihapus.');
+}
+
+function populateFilterProject() {
+  const sel = document.getElementById('filter-project');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Semua Proyek</option>';
+  projects.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p; opt.textContent = p;
+    if (p === cur) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function renderHistory() {
+  const records = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  const filterP  = document.getElementById('filter-project').value;
+  const filterF  = document.getElementById('filter-from').value;
+  const filterT  = document.getElementById('filter-to').value;
+
+  const filtered = records.filter(r => {
+    if (filterP && !r.projects.includes(filterP)) return false;
+    if (filterF && r.tanggal < filterF) return false;
+    if (filterT && r.tanggal > filterT) return false;
+    return true;
+  });
+
+  const cont = document.getElementById('history-list');
+  if (!filtered.length) {
+    cont.innerHTML = '<div class="history-empty">Belum ada laporan tersimpan.</div>';
+    return;
+  }
+
+  cont.innerHTML = filtered.map(r => {
+    const tgl  = formatTanggal(r.tanggal);
+    const waktu= r.jamMulai ? r.jamMulai + (r.jamSelesai ? '-'+r.jamSelesai : '') + ' WITA' : '—';
+    const chips= (r.projects||[]).map(p=>`<span class="hc-chip">${p}</span>`).join('');
+    return `
+    <div class="history-card">
+      <div class="hc-top">
+        <div class="hc-date">📅 ${tgl}</div>
+        <div class="hc-time">⏱ ${waktu}</div>
+      </div>
+      <div class="hc-projects">${chips}</div>
+      <div class="hc-cause">${r.penyebab || '—'}</div>
+      <div class="hc-actions">
+        <button class="hc-btn" onclick="loadRecord(${r.id})">✏️ Edit</button>
+        <button class="hc-btn" onclick="previewRecord(${r.id})">👁 Preview</button>
+        <button class="hc-btn danger" onclick="deleteRecord(${r.id})">🗑 Hapus</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function previewRecord(id) {
+  const records = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  const r = records.find(x => x.id === id);
+  if (!r) return;
+  const wa  = buildWAText(r);
+  const html= wa.replace(/\*([^*]+)\*/g, '<span class="bold">$1</span>');
+  document.getElementById('preview-output').innerHTML = html;
+  switchTab('preview');
+}
+
+// ────────────────────────── UTIL ──────────────────────────
+function resetForm() {
+  if (!confirm('Reset semua isian?')) return;
+  document.getElementById('inp-jam-mulai').value  = '';
+  document.getElementById('inp-jam-selesai').value= '';
+  document.getElementById('inp-penyebab').value   = '';
+  document.getElementById('inp-tindak').value     = '';
+  selectedProjects.clear();
+  document.getElementById('rekom-list').innerHTML = '';
+  rekoms = [];
+  renderChips();
+}
+
+function showToast(msg = '✓') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function escQ(s) { return s.replace(/'/g,"&#39;").replace(/"/g,'&quot;'); }
+
+// ═════════════ GAS SYNC ═════════════
+const SCRIPT_URL = localStorage.getItem('shm_script_url') || 'https://script.google.com/macros/s/AKfycbx0PqBdhvnNm6kvz-HsrjmIQGj-_wDy19wgy_5zFLZBBAEM5KQ3QUzEtyxFHVJy5PE/exec';
+
+async function pushGAS(action, payload) {
+  if (!SCRIPT_URL) return;
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action, ...payload }) });
+  } catch(e) { console.warn('GAS push fail', e); }
+}
+async function syncFromGAS() {
+  if (!SCRIPT_URL) { showToast('⚠️ URL GAS belum diset'); return; }
+  showToast('⏳ Memuat...');
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=getLaporan');
+    const data = await res.json();
+    if (data && data.records) {
+      localStorage.setItem(STORE_KEY, JSON.stringify(data.records));
+      renderHistory();
+      showToast('✓ ' + data.records.length + ' laporan dimuat');
+    } else showToast('⚠️ Tidak ada data');
+  } catch(e) { showToast('❌ Gagal sync'); }
+}
+
+// Hook save & delete to GAS
+const _origSave = saveReport;
+saveReport = function() {
+  const data = buildData();
+  if (!data.tanggal) { alert('Isi tanggal dulu!'); return; }
+  if (!data.projects.length) { alert('Pilih minimal 1 proyek!'); return; }
+  if (!data.penyebab) { alert('Isi penyebab dulu!'); return; }
+  const records = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  data.id = Date.now();
+  data.savedAt = new Date().toISOString();
+  records.unshift(data);
+  localStorage.setItem(STORE_KEY, JSON.stringify(records));
+  pushGAS('saveLaporan', { record: data });
+  showToast('✓ Laporan disimpan & disinkron!');
+};
+const _origDelete = deleteRecord;
+deleteRecord = function(id) {
+  if (!confirm('Hapus laporan ini?')) return;
+  let records = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  records = records.filter(x => x.id !== id);
+  localStorage.setItem(STORE_KEY, JSON.stringify(records));
+  pushGAS('deleteLaporan', { id });
+  renderHistory();
+  showToast('Laporan dihapus.');
+};
+
+// ═════════════ FILTERED ACTIONS ═════════════
+function getFilteredRecords() {
+  const records = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  const fp = document.getElementById('filter-project').value;
+  const ff = document.getElementById('filter-from').value;
+  const ft = document.getElementById('filter-to').value;
+  return records.filter(r => {
+    if (fp && !(r.projects||[]).includes(fp)) return false;
+    if (ff && (r.tanggal||'') < ff) return false;
+    if (ft && (r.tanggal||'') > ft) return false;
+    return true;
+  });
+}
+
+function copyFiltered() {
+  const filtered = getFilteredRecords();
+  if (!filtered.length) { showToast('⚠️ Tidak ada laporan'); return; }
+  const fp = document.getElementById('filter-project').value;
+  const ff = document.getElementById('filter-from').value;
+  const ft = document.getElementById('filter-to').value;
+  let head = `📋 KUMPULAN LAPORAN KETERLAMBATAN\nPT. SUMBER HAYATI MANDIRI\n`;
+  if (fp) head += `Proyek: ${fp}\n`;
+  if (ff || ft) head += `Periode: ${ff||'—'} s/d ${ft||'—'}\n`;
+  head += `Total: ${filtered.length} laporan\n` + '═'.repeat(40) + '\n\n';
+  const body = filtered.map((r,i) => `[ LAPORAN ${i+1} ]\n${buildWAText(r)}`)
+                       .join('\n\n' + '─'.repeat(40) + '\n\n');
+  navigator.clipboard.writeText(head + body)
+    .then(() => showToast(`✓ ${filtered.length} laporan tersalin`));
+}
+
+function exportFilteredPDF() {
+  const filtered = getFilteredRecords();
+  if (!filtered.length) { showToast('⚠️ Tidak ada laporan'); return; }
+  const fp = document.getElementById('filter-project').value;
+  const ff = document.getElementById('filter-from').value;
+  const ft = document.getElementById('filter-to').value;
+  const now = new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  const win = window.open('', '_blank');
+  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Laporan Keterlambatan</title>
+    <style>body{font-family:'Plus Jakarta Sans',Arial,sans-serif;padding:20px;font-size:12px;color:#111}
+    h1{font-size:15px;text-align:center;margin:0}
+    h2{font-size:13px;text-align:center;margin:6px 0 14px;color:#1a3358}
+    table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px}
+    td{padding:5px 8px;border:1px solid #e5e7eb;vertical-align:top}
+    td.k{background:#f9fafb;font-weight:700;width:28%}
+    .meta{text-align:center;color:#666;font-size:11px;margin-bottom:14px}
+    .card{border:1px solid #e5e7eb;border-radius:6px;padding:10px;margin-bottom:12px;page-break-inside:avoid}
+    .pn{font-weight:700;color:#666;font-size:10px;margin-bottom:6px}
+    .chip{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:20px;padding:1px 8px;font-size:10px;margin:1px}
+    @media print{button{display:none}@page{margin:15mm}}
+    </style></head><body>
+    <h1>PT. SUMBER HAYATI MANDIRI</h1>
+    <h2>LAPORAN KETERLAMBATAN PELAKSANAAN PEKERJAAN</h2>
+    <div class="meta">
+      ${fp?`Proyek: ${fp}<br>`:''}
+      ${(ff||ft)?`Periode: ${ff||'—'} s/d ${ft||'—'}<br>`:''}
+      Dicetak: ${now} · ${filtered.length} laporan
+    </div>`;
+  filtered.forEach((r,i) => {
+    const tgl = r.tanggal ? formatTanggal(r.tanggal) : '—';
+    const waktu = r.jamMulai ? r.jamMulai + (r.jamSelesai?' - '+r.jamSelesai:'') + ' WITA' : '—';
+    const chips = (r.projects||[]).map(p=>`<span class="chip">${p}</span>`).join(' ');
+    const rekoms = (r.rekomList||[]).map(x=>`<li>${x}</li>`).join('') || '<li>—</li>';
+    html += `<div class="card">
+      <div class="pn">LAPORAN ${i+1} · 📅 ${tgl} · ⏱ ${waktu}</div>
+      <div style="margin-bottom:6px">${chips}</div>
+      <table>
+        <tr><td class="k">1. Proyek</td><td>${(r.projects||[]).join(', ')||'—'}</td></tr>
+        <tr><td class="k">2. Waktu</td><td>${waktu}</td></tr>
+        <tr><td class="k">3. Penyebab</td><td>${r.penyebab||'—'}</td></tr>
+        <tr><td class="k">4. Rekomendasi</td><td><ul style="margin:0;padding-left:14px">${rekoms}</ul></td></tr>
+        <tr><td class="k">5. Tindak Lanjut</td><td>${r.tindak||'—'}</td></tr>
+      </table></div>`;
+  });
+  html += `<div style="text-align:center;margin-top:16px">
+    <button onclick="window.print()" style="padding:10px 24px;background:#1d4ed8;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer">🖨️ Print / Save PDF</button>
+  </div></body></html>`;
+  win.document.write(html); win.document.close();
+  setTimeout(()=>win.print(), 600);
+}
+
+// Patch renderHistory to also show count
+const _origRender = renderHistory;
+renderHistory = function() {
+  _origRender();
+  const all = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  const fil = getFilteredRecords();
+  const el = document.getElementById('filter-count');
+  if (el) el.textContent = `Menampilkan ${fil.length} dari ${all.length} laporan`;
+};
+</script>
+</body>
+</html>
